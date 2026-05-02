@@ -20,6 +20,9 @@ Dockerfile
 	Exposes both ports (FastAPI + Dash)
 	Runs both apps inside one container using uvicorn + python
 
+To Run application
+    uvicorn server:app --reload
+
 
 To Build and Rebuild a Docker Image
 docker build -t machine-learning-chatbot .
