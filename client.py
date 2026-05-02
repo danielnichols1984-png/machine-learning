@@ -1,0 +1,71 @@
+import requests
+from dash import Dash, html, dcc, callback, Output, Input, State
+
+app = Dash(__name__)
+
+app.layout = html.Div(children=[
+
+    # Chat window
+    html.Div(
+        id="output-conversation",
+        style={
+            "width": "90%",
+            "height": "70vh",
+            "margin": "auto",
+            "whiteSpace": "pre-wrap",
+            "overflowY": "scroll",
+            "border": "1px solid #444",
+            "padding": "10px",
+            "backgroundColor": "#f9f9f9"
+        }
+    ),
+
+    # Input area
+    html.Div(children=[
+        dcc.Textarea(
+            id="input-text",
+            placeholder="Type here...",
+            style={"width": "100%", "height": "100px"}
+        ),
+
+        html.Button(
+            "Submit",
+            id="input-submit",
+            style={"width": "90%", "margin": "10px auto", "display": "block"}
+        ),
+
+        dcc.Store(id="store-chat", data="")
+    ])
+])
+
+
+@callback(
+    Output("output-conversation", "children"),
+    Output("store-chat", "data"),
+    Input("input-submit", "n_clicks"),
+    State("input-text", "value"),
+    State("store-chat", "data"),
+    prevent_initial_call=True
+)
+def update_chat(n_clicks, user_text, chat_history):
+    if not user_text:
+        return chat_history, chat_history
+
+    # Send request to FastAPI server
+    try:
+        response = requests.post(
+            "http://127.0.0.1:8000/",
+            json={"question": user_text}
+        )
+        bot_reply = response.json().get("response", "[No response]")
+    except Exception as e:
+        bot_reply = f"Error contacting server: {e}"
+
+    # Append to chat history
+    new_history = f"{chat_history}\nUser: {user_text}\nBot: {bot_reply}\n"
+
+    return new_history, new_history
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
