@@ -1,5 +1,4 @@
-Machine-learning chatbot Using OpenAI
-
+# gemini-machine-learning
 This application is using llama to index pdfs in order to generate content for a working chatbot application that only interacts with the data that it is trained on. 
 
 Included Files
@@ -23,16 +22,16 @@ Dockerfile
 To Run application
     uvicorn server:app --reload
 
-
 To Build and Rebuild a Docker Image
-docker build -t machine-learning-chatbot .
+docker build -t gemini-machine-learning .
 
 To Run Docker Container
-docker run -p 8000:8000 -p 5600:5000 machine-learning-chatbot
+docker run -p 8000:8000 -p 5600:5000 gemini-machine-learning
 
 Port in use Error
 Find what's using a Port:  lsof -i :5000
 Kill Container that is using ports:  kill -9 12345
+Kill all on a port:  kill -9 $(lsof -t -i :5000)
 
 
 Troubleshooting
@@ -46,24 +45,14 @@ docker stop $(docker ps -aq) 2>/dev/null
 docker rm $(docker ps -aq) 2>/dev/null
 
 
-_____________________________________________________
-Machine Learning using Gemini
-Change this:
-    from openai import OpenAI
-    client = OpenAI(api_key=...)
+Push to Github
+git add .
+git commit -m "your message"
+git push
 
-To This:
-    from google import genai
-    client = genai.Client(api_key=...)
+Get the most recent commit
+git reset --hard HEAD
 
-The Embedding module
-Instead of:
-    text-embedding-3-large
-Use this:
-    models/embedding-001
-
-Add the following to Index if you change to Gemini
-google-genai
-groq
-
-___________________________________________________
+Pull the latest from remote and discards all local changes
+git fetch --all
+git reset --hard origin/main
