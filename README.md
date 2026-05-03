@@ -23,10 +23,10 @@ To Run application
     uvicorn server:app --reload
 
 To Build and Rebuild a Docker Image
-docker build -t gemini-machine-learning .
+docker build -t machine-learning-chatbot .
 
 To Run Docker Container
-docker run -p 8000:8000 -p 5600:5000 gemini-machine-learning
+docker run -p 8000:8000 -p 5600:5000 machine-learning-chatbot
 
 Port in use Error
 Find what's using a Port:  lsof -i :5000
